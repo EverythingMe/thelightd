@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tunnels</title>
+    <style>
+        #vpn-list {
+            list-style: none;
+        }
+
+        .vpn {
+            display: inline-block;
+            margin: 15px;
+            margin-bottom: 55px;
+            text-align: center;
+        }
+        .vpn a {
+            display: block;
+            height: 55px;
+            width: 100px;
+            text-transform: capitalize;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div id="content">
+        <ul id="vpn-list"></ul>
+    </div>
+
+    <script>
+        var content = document.getElementById('content');
+        var resource = 'api/vpns';
+
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = updateReadyState;
+
+        xhr.open('GET', resource, true);
+        xhr.send();
+
+        function updateReadyState(e) {
+            if (xhr.readyState === 4) {
+                var countries = JSON.parse(xhr.responseText || '') || [];
+                var list = document.getElementById('vpn-list');
+
+                if (countries.length) {
+                    for (var i = 0, country; country = countries[i++]; ) {
+                        var item = document.createElement('li');
+                        item.classList.add('vpn');
+                        item.classList.add(country);
+
+                        var link = document.createElement('a');
+                        link.href = 'api/set/' + country;
+                        link.textContent = country;
+                        link.style.background = 'url("img/' + country + '.gif") bottom center no-repeat';
+                        
+                        item.appendChild(link);
+                        list.appendChild(item);
+                    }
+
+                } else {
+                    console.error(xhr.responseText);
+                    alert("Oops! something is wrong :(")
+                }
+            }
+        };
+    </script>
+</body>
+</html>
