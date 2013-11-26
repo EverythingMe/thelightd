@@ -104,7 +104,7 @@ class IpSet(object):
         IpSetCommandWrapper.remove(self.name, item)
         self.ipset.listItems.remove(item)
 
-    def __hasitem__(self, item):
+    def __contains__(self, item):
         """Returns true if `item' exists in this IP set"""
         return item in self.ipset.listItems
 
